@@ -20,6 +20,12 @@ jobs:
       - name: Checkout sources
         uses: actions/checkout@v4
 
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
         with:
@@ -46,6 +52,12 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -150,20 +162,55 @@ jobs:
       - name: Run fmt
         run: cargo fmt --check
 
-  docs:
-    name: "Build rust docs"
-    runs-on: ubuntu-22.04
-    defaults:
-      run:
-        working-directory: ./src-tauri
+  build_frontend:
+    name: "Build Frontend"
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
 
-      - name: install dependencies
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install frontend dependencies
+        run: pnpm install
+
+      - name: build
+        run: pnpm build
+
+  build_app:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: 'ubuntu-22.04'
+          - os: macos-latest
+          - os: windows-latest
+    name: "Build App on ${{ matrix.os }}"
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
         run: |
           sudo apt-get update
           sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
+
+      - name: install frontend dependencies
+        run: pnpm install
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -171,7 +218,6 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
-          components: rustfmt
 
-      - name: Run fmt
-        run: cargo doc
+      - name: build
+        run: pnpm tauri build
