@@ -3,7 +3,7 @@ on: [push, pull_request]
 name: CI
 
 jobs:
-  check_lib:
+  check_rust:
     strategy:
       fail-fast: false
       matrix:
@@ -30,7 +30,7 @@ jobs:
       - name: Run cargo check
         run: cargo check
 
-  test_lib:
+  test_rust:
     strategy:
       fail-fast: false
       matrix:
@@ -57,7 +57,7 @@ jobs:
       - name: Run cargo test
         run: cargo test
 
-  lints_lib:
+  lints_rust:
     strategy:
       fail-fast: false
       matrix:
@@ -85,7 +85,7 @@ jobs:
       - name: Run cargo clippy
         run: cargo clippy -- -D warnings
 
-  build_lib:
+  build_rust:
     strategy:
       fail-fast: false
       matrix:
@@ -112,7 +112,7 @@ jobs:
       - name: Run cargo build
         run: cargo build
 
-  format_lib:
+  format_rust:
     name: "Check formatting"
     runs-on: ubuntu-latest
     defaults:

@@ -7,7 +7,7 @@ function App() {
         <div class="container">
             <h1> Linux DS </h1>
             <label>
-                Team Number <input type="number" onChange={(val) => { teamNum = val }}> Team Number </input>
+                Team Number <input type="number" onChange={(val) => { teamNum = val.target.value }}> Team Number </input>
             </label>
             <button onClick={() => { invoke('enable', { teamNum: Number(teamNum) }) }}> Enable </button>
             <button onClick={() => { invoke('disable', { teamNum: Number(teamNum) }) }}> Disable </button>
