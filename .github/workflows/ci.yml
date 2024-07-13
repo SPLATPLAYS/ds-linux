@@ -164,6 +164,7 @@ jobs:
 
   build_frontend:
     name: "Build Frontend"
+    runs-on: ubuntu-22.04
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
