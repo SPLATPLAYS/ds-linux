@@ -13,7 +13,9 @@ jobs:
           - os: windows-latest
     name: "Check Library on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -38,7 +40,9 @@ jobs:
           - os: windows-latest
     name: "Test Library on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -63,7 +67,9 @@ jobs:
           - os: windows-latest
     name: "Lint Library on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -89,7 +95,9 @@ jobs:
           - os: windows-latest
     name: "Build Library on ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -107,7 +115,9 @@ jobs:
   format_lib:
     name: "Check formatting"
     runs-on: ubuntu-latest
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
@@ -126,7 +136,9 @@ jobs:
   docs:
     name: "Build rust docs"
     runs-on: ubuntu-latest
-    working-directory: ./src-tauri
+    defaults:
+      run:
+        working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
