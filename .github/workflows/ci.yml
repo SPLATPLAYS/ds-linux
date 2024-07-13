@@ -8,10 +8,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: 'ubuntu-22.04'
           - os: macos-latest
           - os: windows-latest
-    name: "Check Library on ${{ matrix.os }}"
+    name: "Check ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -35,10 +35,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
           - os: macos-latest
           - os: windows-latest
-    name: "Test Library on ${{ matrix.os }}"
+    name: "Test ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -62,10 +62,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
           - os: macos-latest
           - os: windows-latest
-    name: "Lint Library on ${{ matrix.os }}"
+    name: "Lint ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -73,6 +73,12 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -90,10 +96,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - os: ubuntu-latest
+          - os: ubuntu-22.04
           - os: macos-latest
           - os: windows-latest
-    name: "Build Library on ${{ matrix.os }}"
+    name: "Build ${{ matrix.os }}"
     runs-on: ${{ matrix.os }}
     defaults:
       run:
@@ -101,6 +107,12 @@ jobs:
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-22.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -114,13 +126,18 @@ jobs:
 
   format_rust:
     name: "Check formatting"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
@@ -135,13 +152,18 @@ jobs:
 
   docs:
     name: "Build rust docs"
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     defaults:
       run:
         working-directory: ./src-tauri
     steps:
       - name: Checkout sources
         uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libwebkit2gtk-4.0-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
 
       - name: Install stable toolchain
         uses: actions-rs/toolchain@v1
