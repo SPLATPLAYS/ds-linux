@@ -1,6 +1,5 @@
 import { invoke } from "@tauri-apps/api/tauri";
 import "./App.css";
-import { useState } from "preact/hooks";
 
 function App() {
     return (
@@ -8,11 +7,8 @@ function App() {
             <h1> Linux DS </h1>
             <button onClick={() => { invoke('enable') }}> Enable </button>
             <button onClick={() => { invoke('disable') }}> Disable </button>
-            <select onInput={async (val) => {
-                const mode = val.target.value;
-                invoke('select_mode', { mode: mode });
-            }}>
-                <option value="teleop" selected={true}> Teleoperated </option>
+            <select onInput={async (val) => { invoke('select_mode', { mode: val.target.value }) }}>
+                <option value="teleop"> Teleoperated </option>
                 <option value="autonomous"> Autonomous </option>
                 <option value="test"> Test </option>
             </select>
